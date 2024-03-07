@@ -17,13 +17,13 @@ const config = ref<QuaggaJSConfigObject>({
     willReadFrequently: true,
     target: '#scanner',
     constraints: {
-      width: 640,
-      height: 480,
-      aspectRatio: 640 / 480
+      width: 6400,
+      height: 4800
     }
   },
   locator: {
     halfSample: true,
+    willReadFrequently: true,
     patchSize: 'x-small'
   },
   // numOfWorkers: 4,
@@ -51,14 +51,14 @@ const config = ref<QuaggaJSConfigObject>({
 });
 
 onMounted(() => {
-  config.value.inputStream!.constraints = {
-    width: scanner.value!.offsetWidth,
-    height: scanner.value!.offsetHeight,
-    // facingMode: 'environment',
-    aspectRatio: scanner.value!.offsetWidth / scanner.value!.offsetHeight
-  };
+  // config.value.inputStream!.constraints = {
+  //   width: scanner.value!.offsetWidth,
+  //   height: scanner.value!.offsetHeight,
+  //   // facingMode: 'environment',
+  //   aspectRatio: scanner.value!.offsetWidth / scanner.value!.offsetHeight
+  // };
 
-  Quagga.init(config.value, err => {
+  Quagga.init(config.value, (err: any) => {
     if (err) {
       return console.error(err);
     }
@@ -74,6 +74,7 @@ onUnmounted(() => {
 });
 
 const onDetected = (result: QuaggaJSResultObject) => {
+  console.log(result);
   alert(result.codeResult.code);
 };
 
@@ -82,7 +83,6 @@ const onProcessed = (result: QuaggaJSResultObject) => {
   let drawingCanvas = Quagga.canvas.dom.overlay;
 
   if (result) {
-    console.log(result);
     if (result.boxes) {
       drawingCtx.clearRect(0, 0,
         parseInt(drawingCanvas.getAttribute('width') || '0'),
